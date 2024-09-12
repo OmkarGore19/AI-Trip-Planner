@@ -5,6 +5,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Header from "./components/custom/Header.jsx";
 import CreateTrip from "./create-trip/index";
+import { Toaster } from "@/components/ui/sonner";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Header />
-    <RouterProvider router={router}></RouterProvider>
+    <GoogleOAuthProvider clientId="<import.meta.env.VITE_GOOGLE_CLOUD_CLIENT_ID>">
+      <Header />
+      <Toaster />
+      <RouterProvider router={router}></RouterProvider>
+    </GoogleOAuthProvider>
   </StrictMode>
 );
