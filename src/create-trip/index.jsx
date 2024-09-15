@@ -50,6 +50,75 @@ function CreateTrip() {
     },
   });
 
+  // Function to retrieve the user profile
+  const getUserProfile = (tokenInfo) => {
+    const accessToken = tokenInfo?.access_token; // Get the access token from the login response
+
+    // Corrected access token URL and headers
+    axios
+      .get(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Correct header for Google API
+            Accept: "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log("User Profile Data:", response.data); // Log user profile data
+        localStorage.setItem("user", JSON.stringify(response.data));
+        onGenerateTrip();
+      })
+      .catch((error) => {
+        console.error("Error fetching user profile:", error);
+      });
+  };
+
+  // Trip generation logic
+  const onGenerateTrip = async () => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      setOpenDialog(true);
+      return;
+    }
+
+    // Check for missing or invalid form data
+    if (
+      formData.noOfDays > 10 ||
+      formData.noOfDays === "" || // Empty string check
+      formData.noOfDays === "0" || // Optional: check for "0"
+      !formData.budget ||
+      !formData.traveler ||
+      !formData.location
+    ) {
+      toast("Please fill all the details!");
+      return;
+    }
+    setLoading(true);
+    // Construct the AI prompt
+    const FINAL_PROMPT = AI_PROMPT.replace(
+      "{location}",
+      formData?.location?.label
+    )
+      .replace("{totalDays}", formData?.noOfDays)
+      .replace("{traveler}", formData?.traveler)
+      .replace("{budget}", formData?.budget)
+      .replace("{totalDays}", formData?.noOfDays);
+
+    //console.log("Generated Prompt:", FINAL_PROMPT);
+
+    // Send the prompt to the chat session (assuming chatSession is an instance of your AI API)
+    try {
+      const result = await chatSession.sendMessage(FINAL_PROMPT);
+      console.log("AI Response:", result?.response?.text());
+      setLoading(false);
+      saveAITrip(result?.response?.text());
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
   const saveAITrip = async (TripData) => {
     setLoading(true);
     const docId = Date.now().toString();
@@ -63,46 +132,6 @@ function CreateTrip() {
     });
     setLoading(false);
     navigate(`/view-trip/${docId}`);
-  };
-
-  // Trip generation logic
-  const onGenerateTrip = async () => {
-    //authentication 
-    const user = localStorage.getItem('user');
-    if(!user){
-      return ;
-    }
-
-    if (
-      formData.noOfDays > 10 ||
-      formData.noOfDays === "" || // Check if noOfDays is an empty string
-      formData.noOfDays === "0" || // Optional: If you also want to check for "0" as invalid
-      !formData.budget ||
-      !formData.traveler ||
-      !formData.location
-    ) {
-      toast("Please fill all the details!");
-      return;
-    }
-
-    //console.log("Generated Trip Data:", formData);
-    // Further logic to handle trip generation
-
-    const FINAL_PROMPT = AI_PROMPT
-    .replace(
-      "{location}",
-      formData?.location?.label
-    )
-      .replace("{totalDays}", formData?.noOfDays)
-      .replace("{traveler}", formData?.traveler)
-      .replace("{budget}", formData?.budget)
-      .replace("{totalDays}", formData?.noOfDays)
-
-    console.log(FINAL_PROMPT);
-
-    const result = await chatSession.sendMessage(FINAL_PROMPT);
-
-    console.log(result?.response?.text());
   };
 
   return (
@@ -201,6 +230,29 @@ function CreateTrip() {
           )}
         </Button>
       </div>
+
+      <Dialog open={openDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogDescription>
+              <img src="/logo.png" alt="Logo" width={150} />
+              {/* Remove <h2> from inside <p> */}
+              <h2 className="font-bold text-lg mt-7 text-black">
+                Sign In with Google
+              </h2>
+              {/* Ensure the <p> is not wrapping the <h2> */}
+              <p>
+                To proceed with the application, you need to sign in with Google
+                Authentication securely.
+              </p>
+              <Button className="w-full mt-5 flex gap-3" onClick={login}>
+                <img src="google.png" alt="Google icon" width={20} />
+                Sign In with Google
+              </Button>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
