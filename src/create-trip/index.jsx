@@ -9,10 +9,28 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { chatSession } from "@/service/AIModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/service/firebaseConfig";
+import { AiOutlineLoading } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 function CreateTrip() {
   const [place, setPlace] = useState("");
   const [formData, setFormData] = useState({ noOfDays: "0" });
+  const [openDialog, setOpenDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
+  //navigate to view-trip page
+  const navigate = useNavigate();
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({
@@ -21,6 +39,33 @@ function CreateTrip() {
     }));
   };
 
+  // Google login logic
+  const login = useGoogleLogin({
+    onSuccess: (tokenInfo) => {
+      console.log("Google Login Success:", tokenInfo);
+      getUserProfile(tokenInfo);
+    },
+    onError: (error) => {
+      console.log("Google Login Error:", error);
+    },
+  });
+
+  const saveAITrip = async (TripData) => {
+    setLoading(true);
+    const docId = Date.now().toString();
+    const user = JSON.parse(localStorage.getItem("user"));
+    // Add a new document in collection "cities"
+    await setDoc(doc(db, "AITrips", docId), {
+      userSelection: formData,
+      tripData: JSON.parse(TripData),
+      userEmail: user?.email,
+      id: docId,
+    });
+    setLoading(false);
+    navigate(`/view-trip/${docId}`);
+  };
+
+  // Trip generation logic
   const onGenerateTrip = async () => {
     //authentication 
     const user = localStorage.getItem('user');
@@ -148,7 +193,13 @@ function CreateTrip() {
       </div>
 
       <div className="flex justify-end my-10">
-        <Button onClick={onGenerateTrip}>Generate Trip</Button>
+        <Button disabled={loading} onClick={onGenerateTrip}>
+          {loading ? (
+            <AiOutlineLoading className="h-7 w-7 animate-spin" />
+          ) : (
+            "Generate Trip"
+          )}
+        </Button>
       </div>
     </div>
   );

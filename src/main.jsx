@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Header from "./components/custom/Header.jsx";
 import CreateTrip from "./create-trip/index";
 import { Toaster } from "@/components/ui/sonner";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import Viewtrip from "./view-trip/[tripID]/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +17,11 @@ const router = createBrowserRouter([
   {
     path: "/create-trip",
     element: <CreateTrip />,
+  },
+  {
+    //Dynamic routing using triID
+    path: "/view-trip/:tripID",
+    element: <Viewtrip />,
   },
 ]);
 
