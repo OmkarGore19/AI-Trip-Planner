@@ -1,10 +1,30 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
+import { GetPlaceDetails } from "@/service/GlobalAPI";
+import React, { useEffect } from "react";
 import { FaShareAlt } from "react-icons/fa";
 
 function InfoSection({ trip }) {
   const locationLabel =
     trip?.userSelection?.location?.label || "Location not available";
+
+  useEffect(() => {
+    trip&&GetPlacePhoto();
+  }, [trip]);
+
+  const GetPlacePhoto = async () => {
+    const data = {
+      textQuery: locationLabel
+    };
+    try {
+      const result = await GetPlaceDetails(data);
+      console.log(result.data);
+    } catch (error) {
+      console.error(error);
+      if (error.response) {
+        console.error(error.response.data);
+      }
+    }
+  };
 
   return (
     <div className="font-ubuntu">

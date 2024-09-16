@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import InfoSection from "../components/InfoSection";
 import Hotels from "../components/Hotels";
+import PlacesToVisit from "../components/PlacesToVisit";
+import Footer from "../components/Footer";
 
 function Viewtrip() {
   const { tripID } = useParams();
@@ -36,14 +38,15 @@ function Viewtrip() {
   };
 
   return (
-    <div className="p-10 md:px-20 lg:px-44 xl:pc-56 ">
+    <div className="p-10 md:px-20 lg:px-44 xl:pc-56 text-ubuntu">
       {/* Information Section */}
       <InfoSection trip={trip} />
       {/* Recommended Hotels */}
       <Hotels trip={trip} />
       {/* Daily plan */}
-
+      <PlacesToVisit trip={trip} />
       {/* Footer */}
+      <Footer trip={trip} />
     </div>
   );
 }
