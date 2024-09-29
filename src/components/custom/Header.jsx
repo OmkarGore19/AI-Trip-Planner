@@ -24,11 +24,11 @@ function Header() {
 
   const login = useGoogleLogin({
     onSuccess: (tokenInfo) => {
-      console.log("Google Login Success:", tokenInfo);
+      //console.log("Google Login Success:", tokenInfo);
       getUserProfile(tokenInfo);
     },
     onError: (error) => {
-      console.log("Google Login Error:", error);
+      //console.log("Google Login Error:", error);
     },
   });
 
@@ -45,7 +45,7 @@ function Header() {
         }
       )
       .then((response) => {
-        console.log("User Profile Data:", response.data); // Log user profile data
+        //console.log("User Profile Data:", response.data); // Log user profile data
         localStorage.setItem("user", JSON.stringify(response.data));
         window.location.reload();
       })
@@ -58,29 +58,36 @@ function Header() {
     <div className="p-4 shadow-sm flex justify-between items-center sm:px-4 md:px-10 font-ubuntu">
       {/* Logo */}
       <a href="/">
-      <img
-        src="/logo.png"
-        alt="Logo"
-        className="w-[100px] md:w-[150px]" // Logo size adjusts based on screen size
-      />
+        <img
+          src="/logo.png"
+          alt="Logo"
+          className="w-[100px] md:w-[150px]" // Logo size adjusts based on screen size
+        />
       </a>
       <div>
         {user ? (
           <div className="flex items-center gap-3">
             <a href="/create-trip">
-              <Button variant="outline" className="rounded-full text-sm sm:text-base">
+              <Button
+                variant="outline"
+                className="rounded-full text-sm sm:text-base"
+              >
                 + Create Trip
+                {/* {user?.email} */}
               </Button>
             </a>
             <a href="/my-trips">
-              <Button variant="outline" className="rounded-full text-sm sm:text-base">
+              <Button
+                variant="outline"
+                className="rounded-full text-sm sm:text-base"
+              >
                 My Trips
               </Button>
             </a>
             <Popover>
-              <PopoverTrigger asChild>
+              <PopoverTrigger>
                 <img
-                  src={user?.picture}
+                  src={user?.picture ? user.picture : '/user.png'}
                   className="h-[30px] w-[30px] sm:h-[35px] sm:w-[35px] rounded-full cursor-pointer"
                   alt="User Avatar"
                 />
@@ -100,7 +107,10 @@ function Header() {
             </Popover>
           </div>
         ) : (
-          <Button className="text-sm sm:text-base" onClick={() => setOpenDialog(true)}>
+          <Button
+            className="text-sm sm:text-base"
+            onClick={() => setOpenDialog(true)}
+          >
             Sign In
           </Button>
         )}
@@ -111,8 +121,14 @@ function Header() {
         <DialogContent>
           <DialogHeader>
             <DialogDescription>
-              <img src="/logo.png" alt="Logo" className="w-[100px] md:w-[150px]" />
-              <h2 className="font-bold text-lg mt-7 text-black">Sign In with Google</h2>
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="w-[100px] md:w-[150px]"
+              />
+              <h2 className="font-bold text-lg mt-7 text-black">
+                Sign In with Google
+              </h2>
               <p>
                 To proceed with the application, you need to sign in with Google
                 Authentication securely.

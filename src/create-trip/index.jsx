@@ -140,12 +140,10 @@ function CreateTrip() {
         Just provide some basic information and our trip planner will generate a
         customized itinerary based on your preferences.
       </p>
-
+  
       <div className="mt-10 flex flex-col gap-10">
         <div>
-          <h2 className="text-xl my-3 font-medium">
-            What is destination of choose?
-          </h2>
+          <h2 className="text-xl my-3 font-medium">What is your destination of choice?</h2>
           <GooglePlacesAutocomplete
             apiKey={import.meta.env.VITE_GOOGLE_PLACE_API_KEY}
             selectProps={{
@@ -160,23 +158,20 @@ function CreateTrip() {
           />
         </div>
       </div>
-
+  
       <div>
-        <h2 className="text-xl my-3 font-medium">
-          How many days are you planning your trip?
-        </h2>
+        <h2 className="text-xl my-3 font-medium">How many days are you planning your trip?</h2>
         <Input
           onChange={(e) => handleInputChange("noOfDays", e.target.value)}
         />
       </div>
-
+  
       <div>
         <h2 className="text-xl my-3 font-medium">What is your budget?</h2>
         <p className="text-gray-600 text-l">
-          The budget is exclusively allocated for activities and dining
-          purposes.
+          The budget is exclusively allocated for activities and dining purposes.
         </p>
-        <div className="grid grid-cols-3 gap-5 mt-5 p-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-5 p-2">
           {SelectBudgetOptions.map((item, index) => (
             <div
               key={index}
@@ -188,18 +183,18 @@ function CreateTrip() {
               value={formData.budget}
             >
               <h2 className="text-4xl">{item.icon}</h2>
-              <h2 className="font-bold text-lg">{item.title}</h2>
-              <h2 className="text-sm text-gray-600">{item.desc}</h2>
+              <h2 className="font-bold text-lg break-words">{item.title}</h2>
+              <h2 className="text-sm text-gray-600 break-words overflow-hidden text-ellipsis">
+                {item.desc}
+              </h2>
             </div>
           ))}
         </div>
       </div>
-
+  
       <div>
-        <h2 className="text-xl my-3 font-medium">
-          Who are you planning to travel with on your next adventure?
-        </h2>
-        <div className="grid grid-cols-3 gap-5 mt-5 p-2">
+        <h2 className="text-xl my-3 font-medium">Who are you planning to travel with?</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-5 p-2">
           {SelectTravelerList.map((item, index) => (
             <div
               key={index}
@@ -211,13 +206,15 @@ function CreateTrip() {
               value={formData.traveler}
             >
               <h2 className="text-4xl">{item.icon}</h2>
-              <h2 className="font-bold text-lg">{item.title}</h2>
-              <h2 className="text-sm text-gray-600">{item.desc}</h2>
+              <h2 className="font-bold text-lg break-words">{item.title}</h2>
+              <h2 className="text-sm text-gray-600 break-words overflow-hidden text-ellipsis">
+                {item.desc}
+              </h2>
             </div>
           ))}
         </div>
       </div>
-
+  
       <div className="flex justify-end my-10">
         <Button disabled={loading} onClick={onGenerateTrip}>
           {loading ? (
@@ -227,7 +224,7 @@ function CreateTrip() {
           )}
         </Button>
       </div>
-
+  
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent>
           <DialogHeader>
@@ -250,6 +247,6 @@ function CreateTrip() {
       </Dialog>
     </div>
   );
-}
+}  
 
 export default CreateTrip;

@@ -35,7 +35,7 @@ function UserTripCardItem({ trip, index }) {
         <img
           src={photoURL ? photoURL : "/placeholder.jpg"}
           alt=""
-          className="rounded-xl object-cover w-full lg:h-[250px] sm:h-[160px]"
+          className="rounded-xl object-cover w-full h-[160px]"
         />
         <div className="my-2">
           <h2 className="font-bold text-lg">
