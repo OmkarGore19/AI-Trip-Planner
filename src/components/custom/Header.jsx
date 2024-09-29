@@ -64,13 +64,13 @@ function Header() {
       </a>
 
       <div className="flex items-center gap-2">
-        <a href="/create-trip">
-          <Button variant="outline" className="w-full mb-1 rounded-3xl">
-            + Create Trip
-          </Button>
-        </a>
         {user ? (
-          <>
+          <div className="flex gap-3">
+            <a href="/create-trip">
+              <Button variant="outline" className="w-full mb-1 rounded-3xl">
+                + Create Trip
+              </Button>
+            </a>
             <Popover>
               <PopoverTrigger>
                 <img
@@ -99,7 +99,7 @@ function Header() {
                 </Button>
               </PopoverContent>
             </Popover>
-          </>
+          </div>
         ) : (
           <Button
             className="text-sm sm:text-base"
