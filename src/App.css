@@ -1,5 +1,9 @@
 @font-face {
     font-family: 'Ubuntu';
-    src: url('fonts/Ubuntu-Regular.ttf') format('truetype'),
-         url('fonts/Ubuntu-Bold.ttf') format('truetype');
-}
+    src: url('/fonts/Ubuntu-Bold.woff2') format('woff2'),
+         url('/fonts/Ubuntu-Bold.woff') format('woff'),
+         url('/fonts/Ubuntu-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+  

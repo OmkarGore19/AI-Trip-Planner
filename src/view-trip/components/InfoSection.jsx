@@ -1,35 +1,60 @@
 import { Button } from "@/components/ui/button";
-import { GetPlaceDetails } from "@/service/GlobalAPI";
-import React, { useEffect } from "react";
+import { GetPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalAPI";
+import React, { useEffect, useState } from "react";
 import { FaShareAlt } from "react-icons/fa";
 
 function InfoSection({ trip }) {
   const locationLabel =
     trip?.userSelection?.location?.label || "Location not available";
+  const [photoURL, setPhotoURL] = useState();
 
   useEffect(() => {
-    trip&&GetPlacePhoto();
+    if (trip && locationLabel !== "Location not available") {
+      GetPlacePhoto();
+    }
   }, [trip]);
 
   const GetPlacePhoto = async () => {
     const data = {
-      textQuery: locationLabel
+      textQuery: locationLabel,
     };
     try {
       const result = await GetPlaceDetails(data);
-      console.log(result.data);
+      //console.log(result.data);
+      const photoURL = PHOTO_REF_URL.replace(
+        "{NAME}",
+        result.data.places[0].photos[2].name
+      );
+      setPhotoURL(photoURL);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       if (error.response) {
-        console.error(error.response.data);
+        //console.error(error.response.data);
       }
+    }
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: locationLabel,
+          text: `🌍 Discover an amazing trip to ${locationLabel}! Planned with TourificAI - Your Personal AI Travel Assistant. 🚀 Let TourificAI create your perfect itinerary effortlessly!`,
+          url: window.location.href, // You can adjust this to your desired URL
+        });
+        //console.log("Shared successfully!");
+      } catch (error) {
+        //console.error("Error sharing", error);
+      }
+    } else {
+      console.log("Web Share API not supported in this browser.");
     }
   };
 
   return (
     <div className="font-ubuntu">
       <img
-        src="/placeholder.jpg"
+        src={photoURL ? photoURL : "/placeholder.jpg"}
         className="h-[340px] w-full object-cover rounded-xl"
         alt="Location"
       />
@@ -51,7 +76,7 @@ function InfoSection({ trip }) {
           </div>
         </div>
 
-        <Button>
+        <Button onClick={handleShare}>
           <FaShareAlt />
         </Button>
       </div>

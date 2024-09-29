@@ -42,11 +42,11 @@ function CreateTrip() {
   // Google login logic
   const login = useGoogleLogin({
     onSuccess: (tokenInfo) => {
-      console.log("Google Login Success:", tokenInfo);
+      //console.log("Google Login Success:", tokenInfo);
       getUserProfile(tokenInfo);
     },
     onError: (error) => {
-      console.log("Google Login Error:", error);
+      //console.log("Google Login Error:", error);
     },
   });
 
@@ -66,12 +66,12 @@ function CreateTrip() {
         }
       )
       .then((response) => {
-        console.log("User Profile Data:", response.data); // Log user profile data
+        //console.log("User Profile Data:", response.data); // Log user profile data
         localStorage.setItem("user", JSON.stringify(response.data));
         onGenerateTrip();
       })
       .catch((error) => {
-        console.error("Error fetching user profile:", error);
+        //console.error("Error fetching user profile:", error);
       });
   };
 
@@ -82,7 +82,6 @@ function CreateTrip() {
       setOpenDialog(true);
       return;
     }
-
     // Check for missing or invalid form data
     if (
       formData.noOfDays > 10 ||
@@ -105,17 +104,15 @@ function CreateTrip() {
       .replace("{traveler}", formData?.traveler)
       .replace("{budget}", formData?.budget)
       .replace("{totalDays}", formData?.noOfDays);
-
     //console.log("Generated Prompt:", FINAL_PROMPT);
-
     // Send the prompt to the chat session (assuming chatSession is an instance of your AI API)
     try {
       const result = await chatSession.sendMessage(FINAL_PROMPT);
-      console.log("AI Response:", result?.response?.text());
+      //console.log("AI Response:", result?.response?.text());
       setLoading(false);
       saveAITrip(result?.response?.text());
     } catch (error) {
-      console.error("Error sending message:", error);
+      //console.error("Error sending message:", error);
     }
   };
 
@@ -135,7 +132,7 @@ function CreateTrip() {
   };
 
   return (
-    <div className="sm:px-10 md:px-32 lg:px-56 xl:px-10 px-5 mt-10">
+    <div className="sm:px-10 md:px-32 lg:px-56 xl:px-10 px-5 mt-10 font-ubuntu">
       <h2 className="font-bold text-3xl text-default">
         Tell us your travel preferences..✈️🏝️
       </h2>
@@ -200,7 +197,7 @@ function CreateTrip() {
 
       <div>
         <h2 className="text-xl my-3 font-medium">
-          Who do you plan on traveling with on your next adventure?
+          Who are you planning to travel with on your next adventure?
         </h2>
         <div className="grid grid-cols-3 gap-5 mt-5 p-2">
           {SelectTravelerList.map((item, index) => (
@@ -231,22 +228,20 @@ function CreateTrip() {
         </Button>
       </div>
 
-      <Dialog open={openDialog}>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogDescription>
               <img src="/logo.png" alt="Logo" width={150} />
-              {/* Remove <h2> from inside <p> */}
               <h2 className="font-bold text-lg mt-7 text-black">
                 Sign In with Google
               </h2>
-              {/* Ensure the <p> is not wrapping the <h2> */}
               <p>
                 To proceed with the application, you need to sign in with Google
                 Authentication securely.
               </p>
               <Button className="w-full mt-5 flex gap-3" onClick={login}>
-                <img src="google.png" alt="Google icon" width={20} />
+                <img src="/google.png" alt="Google icon" width={20} />
                 Sign In with Google
               </Button>
             </DialogDescription>

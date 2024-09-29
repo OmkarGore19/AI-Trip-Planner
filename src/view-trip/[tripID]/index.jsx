@@ -25,14 +25,14 @@ function Viewtrip() {
 
       if (docSnap.exists()) {
         const tripData = docSnap.data();
-        console.log("Trip Data:", tripData); // Check the structure of the trip object here
+        //console.log("Trip Data:", tripData); // Check the structure of the trip object here
         setTrip(tripData);
       } else {
-        console.log("No such doc found");
+        //console.log("No such doc found");
         toast.error("No trip found!");
       }
     } catch (error) {
-      console.error("Error getting trip data:", error);
+      //console.error("Error getting trip data:", error);
       toast.error("Failed to fetch trip data!");
     }
   };
