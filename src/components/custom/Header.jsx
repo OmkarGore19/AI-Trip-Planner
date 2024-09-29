@@ -24,11 +24,10 @@ function Header() {
 
   const login = useGoogleLogin({
     onSuccess: (tokenInfo) => {
-      //console.log("Google Login Success:", tokenInfo);
       getUserProfile(tokenInfo);
     },
     onError: (error) => {
-      //console.log("Google Login Error:", error);
+      console.error("Google Login Error:", error);
     },
   });
 
@@ -45,7 +44,6 @@ function Header() {
         }
       )
       .then((response) => {
-        //console.log("User Profile Data:", response.data); // Log user profile data
         localStorage.setItem("user", JSON.stringify(response.data));
         window.location.reload();
       })
@@ -55,57 +53,53 @@ function Header() {
   };
 
   return (
-    <div className="p-4 shadow-sm flex justify-between items-center sm:px-4 md:px-10 font-ubuntu">
+    <div className="p-4 shadow-sm flex justify-between items-center font-ubuntu">
       {/* Logo */}
       <a href="/">
         <img
           src="/logo.png"
           alt="Logo"
-          className="w-[100px] md:w-[150px]" // Logo size adjusts based on screen size
+          className="w-[100px] md:w-[150px] mb-2 md:mb-0" // Logo size adjusts based on screen size
         />
       </a>
-      <div>
+
+      <div className="flex items-center gap-2">
+        <a href="/create-trip">
+          <Button variant="outline" className="w-full mb-1 rounded-3xl">
+            + Create Trip
+          </Button>
+        </a>
         {user ? (
-          <div className="flex items-center gap-3">
-            <a href="/create-trip">
-              <Button
-                variant="outline"
-                className="rounded-full text-sm sm:text-base"
-              >
-                + Create Trip
-                {/* {user?.email} */}
-              </Button>
-            </a>
-            <a href="/my-trips">
-              <Button
-                variant="outline"
-                className="rounded-full text-sm sm:text-base"
-              >
-                My Trips
-              </Button>
-            </a>
+          <>
             <Popover>
               <PopoverTrigger>
                 <img
-                  src={user?.picture ? user.picture : '/user.png'}
-                  className="h-[30px] w-[30px] sm:h-[35px] sm:w-[35px] rounded-full cursor-pointer"
+                  src={user?.picture ? user.picture : "/user.png"}
+                  className="h-8 w-8 sm:h-9 sm:w-9 rounded-full cursor-pointer object-cover"
                   alt="User Avatar"
                 />
               </PopoverTrigger>
-              <PopoverContent>
-                <h2
+              <PopoverContent className="flex flex-col items-start">
+                <a href="/my-trips">
+                  <Button variant="link" className="w-full">
+                    My Trips
+                  </Button>
+                </a>
+                <hr width="100%" color="gray" />
+                <Button
+                  variant="link"
                   onClick={() => {
                     googleLogout();
                     localStorage.clear();
                     window.location.reload();
                   }}
-                  className="cursor-pointer"
+                  className="cursor-pointer mb-2"
                 >
                   Logout
-                </h2>
+                </Button>
               </PopoverContent>
             </Popover>
-          </div>
+          </>
         ) : (
           <Button
             className="text-sm sm:text-base"
