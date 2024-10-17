@@ -26,11 +26,6 @@ function Hero() {
         <Button>Get Started, It's free!</Button>
       </Link>
 
-      {/* <div className="mb-18 flex items-center">
-      
-      <img src="/herocouple.svg" alt="" />
-      </div> */}
-
       {/* Responsive mockup image */}
       <img
         src="/mockup.png"

@@ -1,19 +1,26 @@
 import { db } from "@/service/firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Corrected from useNavigation to useNavigate
+import { useNavigate } from "react-router-dom";
 import UserTripCardItem from "./components/UserTripCardItem";
 
 function MyTrips() {
-  const navigate = useNavigate(); // useNavigate instead of useNavigation
+  const navigate = useNavigate();
   const [usertrips, setUserTrips] = useState([]);
-  const [loading, setLoading] = useState(true); // Add a loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getUserTrips();
   }, []);
 
-  // Used to get all user trips
+  // Fetch all user trips from Firestore
   const getUserTrips = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
@@ -28,10 +35,24 @@ function MyTrips() {
     const querySnapshot = await getDocs(q);
     setUserTrips([]); // Reset user trips before fetching
     querySnapshot.forEach((doc) => {
-      //console.log(doc.id, "=>", doc.data());
-      setUserTrips((prevValue) => [...prevValue, doc.data()]);
+      setUserTrips((prevValue) => [
+        ...prevValue,
+        { id: doc.id, ...doc.data() }, // Include doc.id for future actions
+      ]);
     });
     setLoading(false); // Set loading to false once trips are fetched
+  };
+
+  // Delete trip from Firestore
+  const deleteTrip = async (tripId) => {
+    try {
+      await deleteDoc(doc(db, "AITrips", tripId)); // Delete the document with the tripId
+      setUserTrips((prevTrips) =>
+        prevTrips.filter((trip) => trip.id !== tripId)
+      ); // Remove the trip from state
+    } catch (error) {
+      console.error("Error deleting trip: ", error);
+    }
   };
 
   return (
@@ -49,7 +70,12 @@ function MyTrips() {
         ) : usertrips.length > 0 ? (
           // Render trip cards if trips are available
           usertrips.map((trip, index) => (
-            <UserTripCardItem index={index} trip={trip} />
+            <UserTripCardItem
+              key={trip.id}
+              index={index}
+              trip={trip}
+              onDelete={deleteTrip} // Pass the deleteTrip function to the child component
+            />
           ))
         ) : (
           // Show message if no trips are generated yet
@@ -57,7 +83,7 @@ function MyTrips() {
             <img
               src="/notraveldatafound.svg"
               alt="No trips found"
-              className="w-full max-w-xs md:max-w-md lg:max-w-lg" // Responsive widths
+              className="w-full max-w-xs md:max-w-md lg:max-w-lg"
             />
             <h2 className="text-bold text-2xl">No Trips Generated Yet!!</h2>
           </div>
