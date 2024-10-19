@@ -14,13 +14,13 @@ You can check out the live demo here: https://tourificai.netlify.app/
 
 Project ScreenShots:
 
-![1727875534135](https://github.com/user-attachments/assets/181f75c8-1778-43b4-95e5-b721440f9edf)
-
 ![1727875532198](https://github.com/user-attachments/assets/47e1666a-c0d9-451d-b812-e0eebdfe63b5)
 
 ![1727875532071](https://github.com/user-attachments/assets/b6e9748a-c2a1-4fa3-bb14-850f15e14ea5)
 
 ![1727875532384](https://github.com/user-attachments/assets/38658165-8062-4d44-a4ad-0419d192153c)
+
+![1727875534135](https://github.com/user-attachments/assets/181f75c8-1778-43b4-95e5-b721440f9edf)
 
 ![1727875532985](https://github.com/user-attachments/assets/89fa6f14-f768-42c3-a34c-faad5195abc8)
 
