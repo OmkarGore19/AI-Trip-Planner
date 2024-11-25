@@ -18,9 +18,9 @@ function Header() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [openDialog, setOpenDialog] = useState(false); // Manage dialog state
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  //useEffect(() => {
+   // console.log(user);
+  //}, [user]);
 
   const login = useGoogleLogin({
     onSuccess: (tokenInfo) => {

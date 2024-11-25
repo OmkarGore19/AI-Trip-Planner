@@ -11,7 +11,7 @@ function PlaceCardItem({ place }) {
 
   const GetPlacePhoto = async () => {
     const data = {
-      textQuery: place.PlaceName,
+      textQuery: place.placeName || place.PlaceName,
     };
     try {
       const result = await GetPlaceDetails(data);
@@ -32,7 +32,7 @@ function PlaceCardItem({ place }) {
   return (
     <Link
       to={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        place.PlaceName
+        place.placeName || place.PlaceName
       )}`}
       target="_blank"
     >
@@ -42,11 +42,13 @@ function PlaceCardItem({ place }) {
           className="w-full h-[130px] rounded-xl object-cover"
         />
         <div className="flex-1">
-          <h2 className="font-bold text-lg break-words">{place.PlaceName}</h2>
+          <h2 className="font-bold text-lg break-words">
+            {place.placeName || place.PlaceName}
+          </h2>
           <p className="text-sm text-gray-500 break-words overflow-hidden text-ellipsis">
             {place["Place Details"]}
           </p>
-          <p className="mt-2">🕙 {place.timetotravel}</p>
+          <p className="mt-2">🎫 {place["ticket Pricing"]}</p>
         </div>
       </div>
     </Link>

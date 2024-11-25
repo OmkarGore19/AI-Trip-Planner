@@ -117,6 +117,7 @@ function CreateTrip() {
   };
 
   const saveAITrip = async (TripData) => {
+    //console.log(TripData);
     setLoading(true);
     const docId = Date.now().toString();
     const user = JSON.parse(localStorage.getItem("user"));
