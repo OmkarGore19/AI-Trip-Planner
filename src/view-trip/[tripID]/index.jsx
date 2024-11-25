@@ -7,10 +7,12 @@ import InfoSection from "../components/InfoSection";
 import Hotels from "../components/Hotels";
 import PlacesToVisit from "../components/PlacesToVisit";
 import Footer from "../components/Footer";
+import { AiOutlineLoading } from "react-icons/ai";
 
 function Viewtrip() {
   const { tripID } = useParams();
   const [trip, setTrip] = useState({});
+  const [loading, setLoading] = useState(true); // New loading state
 
   useEffect(() => {
     if (tripID) {
@@ -25,17 +27,25 @@ function Viewtrip() {
 
       if (docSnap.exists()) {
         const tripData = docSnap.data();
-        //console.log("Trip Data:", tripData); // Check the structure of the trip object here
         setTrip(tripData);
       } else {
-        //console.log("No such doc found");
         toast.error("No trip found!");
       }
     } catch (error) {
-      //console.error("Error getting trip data:", error);
       toast.error("Failed to fetch trip data!");
+    } finally {
+      setLoading(false); // Set loading to false once the data is fetched
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <AiOutlineLoading className="h-7 w-7 animate-spin" /> {/* Display loading spinner while loading */}
+      </div>
+    );
+  }
+
 
   return (
     <div className="p-10 md:px-20 lg:px-44 xl:pc-56 text-ubuntu">
